@@ -1,1 +1,2 @@
 Hello, GitHub from Jorge Soto!
+I added a new line for part 3 of the lab
