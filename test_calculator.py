@@ -25,5 +25,10 @@ class TestCalculator(unittest.TestCase):
         with self.assertRaises(ValueError):
             divide(10, 0)
 
+    def test_large_numbers(self):
+        self.assertEqual(add(1000000, 2000000), 3000000)
+        self.assertEqual(multiply(1000, 1000), 1000000)
+        self.assertEqual(subtract(9999999, 1), 9999998)
+
 if __name__ == "__main__":
     unittest.main()
