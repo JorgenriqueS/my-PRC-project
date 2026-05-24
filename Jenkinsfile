@@ -5,7 +5,6 @@ pipeline {
         IMAGE_NAME = "app-pipeline-prc"
         CONTAINER_NAME = "app-pipeline-prc-container"
         APP_PORT = "8000"
-        SLACK_WEBHOOK = "https://hooks.slack.com/services/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"
     }
 
     stages {
@@ -52,18 +51,14 @@ pipeline {
 
     post {
         success {
-            sh """
-                curl -X POST -H 'Content-type: application/json' \
-                --data '{"text":"✅ Pipeline exitoso: ${env.JOB_NAME} #${env.BUILD_NUMBER}"}' \
-                ${env.SLACK_WEBHOOK}
-            """
+            mail to: 'jorge.najarro@galileo.edu',
+                 subject: "✅ Pipeline exitoso: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                 body: "El pipeline ${env.JOB_NAME} #${env.BUILD_NUMBER} se completó exitosamente.\n\nVer detalles en: ${env.BUILD_URL}"
         }
         failure {
-            sh """
-                curl -X POST -H 'Content-type: application/json' \
-                --data '{"text":"❌ Pipeline fallido: ${env.JOB_NAME} #${env.BUILD_NUMBER}"}' \
-                ${env.SLACK_WEBHOOK}
-            """
+            mail to: 'jorge.najarro@galileo.edu',
+                 subject: "❌ Pipeline fallido: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                 body: "El pipeline ${env.JOB_NAME} #${env.BUILD_NUMBER} falló.\n\nVer detalles en: ${env.BUILD_URL}"
         }
     }
 }
