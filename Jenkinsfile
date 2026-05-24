@@ -5,6 +5,7 @@ pipeline {
         IMAGE_NAME = "app-pipeline-prc"
         CONTAINER_NAME = "app-pipeline-prc-container"
         APP_PORT = "8000"
+        SLACK_WEBHOOK = "https://hooks.slack.com/services/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"
     }
 
     stages {
@@ -16,13 +17,12 @@ pipeline {
             }
         }
 
-	stage('Build') {
-	    steps {
-	        echo 'Installing dependencies...'
-	        sh 'pip install -r requirements.txt --break-system-packages'
-	    }
-	}
-
+        stage('Build') {
+            steps {
+                echo 'Installing dependencies...'
+                sh 'pip install -r requirements.txt --break-system-packages'
+            }
+        }
 
         stage('Test') {
             steps {
@@ -52,10 +52,18 @@ pipeline {
 
     post {
         success {
-            echo 'Pipeline completed successfully! App running on port ${APP_PORT}.'
+            sh """
+                curl -X POST -H 'Content-type: application/json' \
+                --data '{"text":"✅ Pipeline exitoso: ${env.JOB_NAME} #${env.BUILD_NUMBER}"}' \
+                ${env.SLACK_WEBHOOK}
+            """
         }
         failure {
-            echo 'Pipeline failed. Check the logs above.'
+            sh """
+                curl -X POST -H 'Content-type: application/json' \
+                --data '{"text":"❌ Pipeline fallido: ${env.JOB_NAME} #${env.BUILD_NUMBER}"}' \
+                ${env.SLACK_WEBHOOK}
+            """
         }
     }
 }
