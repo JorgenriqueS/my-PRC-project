@@ -16,17 +16,26 @@ pipeline {
             }
         }
 
+<<<<<<< HEAD
 	stage('Build') {
 	    steps {
 	        echo 'Installing dependencies...'
 	        sh 'pip install -r requirements.txt --break-system-packages'
 	    }
 	}
+=======
+        stage('Build') {
+            steps {
+                echo 'Installing dependencies...'
+                sh 'pip install -r requirements.txt --break-system-packages'
+            }
+        }
+>>>>>>> 4d39276da8cc468d80b312e7a3460c5320473946
 
         stage('Test') {
             steps {
                 echo 'Running unit tests...'
-                sh 'python -m pytest test_calculator.py -v'
+                sh 'python3 -m pytest test_calculator.py -v'
             }
         }
 
